@@ -1,0 +1,82 @@
+#todo_app_gui
+
+import tkinter as tk
+from datetime import datetime
+
+class Task:
+    def __init__(self, title, description, due_date=None, priority=None):
+        self.title = title
+        self.description = description
+        self.due_date = due_date
+        self.priority = priority
+        self.completed = False
+
+    def mark_completed(self):
+        self.completed = True
+
+    def __str__(self):
+        status = "Completed" if self.completed else "Not Completed"
+        return f"{self.title}: {status}"
+
+class TodoApp:
+    def __init__(self, root):
+        self.root = root
+        self.tasks = []
+        self.task_list = tk.Listbox(root, width=80, height=30, bg="light blue", fg="black")
+        self.task_list.pack(padx=10, pady=10)
+
+        self.add_task_frame = tk.Frame(root, bg="light green")
+        self.add_task_frame.pack(padx=10, pady=10)
+
+        self.title_label = tk.Label(self.add_task_frame, text="Title:", bg="light green", fg="black")
+        self.title_label.pack(side=tk.LEFT)
+        self.title_entry = tk.Entry(self.add_task_frame, width=20, bg="white", fg="black")
+        self.title_entry.pack(side=tk.LEFT)
+
+        self.add_task_button = tk.Button(self.add_task_frame, text="Add Task", command=self.add_task, bg="green", fg="white")
+        self.add_task_button.pack(side=tk.LEFT)
+
+        self.edit_task_button = tk.Button(root, text="Edit Task", command=self.edit_task, bg="orange", fg="white")
+        self.edit_task_button.pack(padx=10, pady=10)
+
+        self.mark_task_completed_button = tk.Button(root, text="Mark Task as Completed", command=self.mark_task_completed, bg="blue", fg="white")
+        self.mark_task_completed_button.pack(padx=10, pady=10)
+
+        self.delete_task_button = tk.Button(root, text="Delete Task", command=self.delete_task, bg="red", fg="white")
+        self.delete_task_button.pack(padx=10, pady=10)
+
+    def add_task(self):
+        title = self.title_entry.get()
+        task = Task(title, "")
+        self.tasks.append(task)
+        self.task_list.insert(tk.END, str(task))
+        self.title_entry.delete(0, tk.END)
+
+    def edit_task(self):
+        selected_task = self.task_list.get(self.task_list.curselection())
+        for task in self.tasks:
+            if str(task) == selected_task:
+                self.title_entry.delete(0, tk.END)
+                self.title_entry.insert(0, task.title)
+                break
+
+    def mark_task_completed(self):
+        selected_task = self.task_list.get(self.task_list.curselection())
+        for task in self.tasks:
+            if str(task) == selected_task:
+                task.mark_completed()
+                self.task_list.delete(self.task_list.curselection())
+                self.task_list.insert(tk.END, str(task))
+
+    def delete_task(self):
+        selected_task = self.task_list.get(self.task_list.curselection())
+        for task in self.tasks:
+            if str(task) == selected_task:
+                self.tasks.remove(task)
+                self.task_list.delete(self.task_list.curselection())
+                return
+
+root = tk.Tk()
+root.title("To-Do App")
+app = TodoApp(root)
+root.mainloop()
