@@ -1,0 +1,100 @@
+import tkinter as tk
+from random import choice
+
+class RockPaperScissors:
+    def __init__(self):
+        self.window = tk.Tk()
+        self.window.title("Rock-Paper-Scissors")
+        self.window.geometry("400x300")
+        self.window.configure(background="#f0f0f0")  # light gray background
+
+        self.choices = ["Rock", "Paper", "Scissors"]
+        self.scores = {"User": 0, "Computer": 0}
+
+        # Create a frame for the scores
+        self.score_frame = tk.Frame(self.window, bg="#f0f0f0")
+        self.score_frame.pack()
+
+        self.user_score_label = tk.Label(self.score_frame, text="User Score: 0", font=("Arial", 18), fg="#00698f")  # blue text
+        self.user_score_label.pack(side=tk.LEFT)
+
+        self.computer_score_label = tk.Label(self.score_frame, text="Computer Score: 0", font=("Arial", 18), fg="#ff69b4")  # pink text
+        self.computer_score_label.pack(side=tk.RIGHT)
+
+        # Create a frame for the game buttons
+        self.button_frame = tk.Frame(self.window, bg="#f0f0f0")
+        self.button_frame.pack()
+
+        self.rock_button = tk.Button(self.button_frame, text="Rock", command=self.rock, font=("Arial", 18), bg="#33cc33", fg="white")  # green button
+        self.rock_button.pack(side=tk.LEFT)
+
+        self.paper_button = tk.Button(self.button_frame, text="Paper", command=self.paper, font=("Arial", 18), bg="#ffff66", fg="black")  # yellow button
+        self.paper_button.pack(side=tk.LEFT)
+
+        self.scissors_button = tk.Button(self.button_frame, text="Scissors", command=self.scissors, font=("Arial", 18), bg="#ff9900", fg="white")  # orange button
+        self.scissors_button.pack(side=tk.LEFT)
+
+        # Create a frame for the result and play again button
+        self.result_frame = tk.Frame(self.window, bg="#f0f0f0")
+        self.result_frame.pack()
+
+        self.result_label = tk.Label(self.result_frame, text="", font=("Arial", 24), fg="#00698f")  # blue text
+        self.result_label.pack()
+
+        self.play_again_button = tk.Button(self.result_frame, text="Play Again", command=self.play_again, font=("Arial", 18), bg="#33cc33", fg="white")  # green button
+        self.play_again_button.pack()
+
+    def computer_choice(self):
+        return choice(self.choices)
+
+    def rock(self):
+        computer = self.computer_choice()
+        if computer == "Rock":
+            self.result_label['text'] = "It's a tie!"
+        elif computer == "Scissors":
+            self.result_label['text'] = "You win!"
+            self.scores["User"] += 1
+        else:
+            self.result_label['text'] = "You lose!"
+            self.scores["Computer"] += 1
+        self.update_scores()
+
+    def paper(self):
+        computer = self.computer_choice()
+        if computer == "Paper":
+            self.result_label['text'] = "It's a tie!"
+        elif computer == "Rock":
+            self.result_label['text'] = "You win!"
+            self.scores["User"] += 1
+        else:
+            self.result_label['text'] = "You lose!"
+            self.scores["Computer"] += 1
+        self.update_scores()
+
+    def scissors(self):
+        computer = self.computer_choice()
+        if computer == "Scissors":
+            self.result_label['text'] = "It's a tie!"
+        elif computer == "Paper":
+            self.result_label['text'] = "You win!"
+            self.scores["User"] += 1
+        else:
+            self.result_label['text'] = "You lose!"
+            self.scores["Computer"] += 1
+        self.update_scores()
+
+    def update_scores(self):
+        self.user_score_label['text'] = f"User Score: {self.scores['User']}"
+        self.computer_score_label['text'] = f"Computer Score: {self.scores['Computer']}"
+
+    def play_again(self):
+        self.result_label['text'] = ""
+        self.scores = {"User": 0, "Computer": 0}
+        self.update_scores()
+
+    def run(self):
+        self.window.mainloop()
+
+if __name__ == "__main__":
+    game = RockPaperScissors()
+    game.run()
